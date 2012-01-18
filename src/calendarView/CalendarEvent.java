@@ -10,7 +10,7 @@ import java.util.Calendar;
  *
  * @author FRC2010-Winner2
  */
-public class CalendarEvent {
+public class CalendarEvent implements Comparable<CalendarEvent> {
 
     Calendar calStart;
     Calendar calStop;
@@ -47,15 +47,16 @@ public class CalendarEvent {
         calStop = Calendar.getInstance();
 
     }
+ 
 
     public void setStartCalendar(Calendar x)
     {
-        calStart = x;
+        calStart = (Calendar) x.clone();
     }
     
     public void setStopCalendar(Calendar x)
     {
-        calStop = x;
+        calStop = (Calendar) x.clone();
     }
     public void setStartTime(int hour, int minute) {
         calStart.set(Calendar.HOUR_OF_DAY, hour);
@@ -106,4 +107,18 @@ public class CalendarEvent {
     public int getStopMinute() {
         return calStop.get(Calendar.MINUTE);    
     }
+    
+    Calendar getCalStart()
+    {
+        return calStart;
+    }
+    @Override
+     public int compareTo(CalendarEvent x) {
+        return calStart.compareTo(x.getCalStart());
+    }
+
+//    @Override
+//    public int compareTo(Object o) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
 }

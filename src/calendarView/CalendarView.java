@@ -20,7 +20,7 @@ import java.io.*;
 import tame.*;
 import my.numberaddition.*;
 import java.util.Scanner;
-
+import java.lang.String;
 
 public class CalendarView extends JFrame {
 
@@ -29,27 +29,65 @@ public class CalendarView extends JFrame {
     MultiSpanCellTable table;
     JButton b_one;
     JButton b_split;
-
+    //java.util.List EventList = new ArrayList();
     Calendar cal = Calendar.getInstance();
 
     CalendarView() {
         super("Main View");
-        java.util.List EventList = new ArrayList();
-        CalendarEvent calEv = new CalendarEvent();
-        
-        calEv.setDate(2,1,2012);
-        calEv.setStartTime(1, 0);
-        calEv.setStopTime(3, 11);
-        calEv.setName("Event1");
-        EventList.add(calEv);
-        
-        calEv = new CalendarEvent();
-        calEv.setDate(2,1,2012);
-        calEv.setStartTime(3, 41);
-        calEv.setStopTime(4, 20);
-        calEv.setName("Event2");
-        EventList.add(calEv);
+        //CalendarEvent calEv;
 
+        /****************************************/
+        // Manually added events for debugging  //
+        /***************************************/
+//        calEv = new CalendarEvent(); 
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(2, 0);
+//        calEv.setStopTime(2, 30);
+//        calEv.setName("Event1");
+//        EventList.add(calEv);
+//        
+//        calEv = new CalendarEvent();
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(2, 50);
+//        calEv.setStopTime(3, 20);
+//        calEv.setName("Event2");
+//        EventList.add(calEv);
+//
+//        calEv = new CalendarEvent(); 
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(3, 40);
+//        calEv.setStopTime(5, 30);
+//        calEv.setName("Event3");
+//        EventList.add(calEv);
+//        
+//        calEv = new CalendarEvent();
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(5, 30);
+//        calEv.setStopTime(6, 10);
+//        calEv.setName("Event4");
+//        EventList.add(calEv);
+//        
+//        calEv = new CalendarEvent(); 
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(6, 50);
+//        calEv.setStopTime(8, 39);
+//        calEv.setName("Event5");
+//        EventList.add(calEv);
+//        
+//        calEv = new CalendarEvent();
+//        calEv.setDate(2,1,2012);
+//        calEv.setDayOfWeek(1);
+//        calEv.setStartTime(9, 0);
+//        calEv.setStopTime(9, 49);
+//        calEv.setName("Event6");
+//        EventList.add(calEv);
+        /*****************************/
+//        calEv = new CalendarEvent();
 //        calEv.setDate(2,1,2012);
 //        calEv.setDayOfWeek(3);
 //        calEv.setStartTime(1, 0);
@@ -90,6 +128,18 @@ public class CalendarView extends JFrame {
         getContentPane().add(box);
         setSize(800, 400);
         setVisible(true);
+        
+
+
+//        splitCells(1, 1, 0, 5); // startRow - 1 ? 
+//        table.repaint(); //debug
+//
+//        splitCells(2, 2, 0, 7); // startRow - 1 ? 
+//        table.repaint(); //debug
+//
+//        splitCells(3, 3, 0, 8); // startRow - 1 ? 
+//        table.repaint(); //debug
+        java.util.List EventList = new ArrayList();
         splitCellsIntoHours(EventList);
     }
 
@@ -127,11 +177,14 @@ public class CalendarView extends JFrame {
         calEv.setStopCalendar(cal);
         calEv.setDayOfWeek(columns[0]);
         startHour = rows[0] / numOfRowsPerHour;
-        startMinute = rows[0] % numOfRowsPerHour;
+        startMinute = 10 * (rows[0] % numOfRowsPerHour);
 
-        stopHour = rows[0] / numOfRowsPerHour;
-        stopMinute = rows[0] % numOfRowsPerHour;
-
+        stopHour = startHour;
+        stopMinute = startMinute;
+        
+        stopMinute += 30;
+        stopHour   += stopMinute / 60;
+        stopMinute %= 60;
         //calEv.IncDate(columns[0]);
         calEv.setStartTime(startHour, startMinute);
         calEv.setStopTime(stopHour, stopMinute);
@@ -184,10 +237,10 @@ public class CalendarView extends JFrame {
             System.out.println(""+cal.getStartHour()+":"+cal.getStartMinute());
             System.out.println(""+cal.getStopHour()+":"+cal.getStopMinute());
             
-            startRow = transformToRowNumber(cal.getStartHour(), cal.getStartMinute());
-            endRow = transformToRowNumber(cal.getStopHour(), cal.getStopMinute());
+            startRow = transformToRowNumber(cal.getStartHour(), cal.getStartMinute(), "start");
+            endRow = transformToRowNumber(cal.getStopHour(), cal.getStopMinute(), "stop");
             //endRow = endRow - 1;
-            splitCells(day, eventDay, row, startRow);
+            splitCells(day, eventDay, row, startRow); // startRow - 1 ? 
             table.repaint(); //debug
             //to do merge event
             
@@ -208,8 +261,22 @@ public class CalendarView extends JFrame {
         table.repaint();//debug
     }
 
-    int transformToRowNumber(int hours, int minutes) {
-        return hours * numOfRowsPerHour + minutes * numOfRowsPerHour / 60; //60 minutes per hour
+    int transformToRowNumber(int hours, int minutes, String typeOfRow) {
+        float result;
+        result = hours * numOfRowsPerHour + (float)minutes * numOfRowsPerHour / 60; //60 minutes per hour
+        result = (float)Math.ceil(result);
+        
+        if (typeOfRow.equals("start"))
+        {
+            return (int)result;
+        }
+        else if (typeOfRow.equals("stop"))
+        {
+            return (int)result - 1;
+        }
+        
+        assert(false);
+        return 0;
     }
 
     final void splitCells(int startDay, int stopDay, int startRow, int endRow) {
@@ -267,7 +334,7 @@ public class CalendarView extends JFrame {
         }
         //merge fractional at the end
         if (iter < stopRow) {
-            lastRows = new int[stopRow - iter + 1];
+            lastRows = new int[stopRow - iter];
             lastRows[0] = iter;
             ((CellSpan)cellAtt).combine(lastRows, columns);
             table.repaint();//debug
@@ -279,6 +346,7 @@ public class CalendarView extends JFrame {
             for (int j = 0; j < 24*numOfRowsPerHour; j++)
             {
                 ((CellSpan)cellAtt).split(j, i);
+                table.setValueAt("", j, i);
             }
     }
 }
