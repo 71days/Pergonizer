@@ -195,7 +195,7 @@ public class CalendarView extends JFrame {
     public void combineActionPerformed(ActionEvent e) {
         int[] columns = table.getSelectedColumns();
         int[] rows = table.getSelectedRows();
-        NumberAdditionUI setEventUI = new NumberAdditionUI();
+        AddEventView setEventUI = new AddEventView();
         setEventUI.setVisible(true);
 
         String name;

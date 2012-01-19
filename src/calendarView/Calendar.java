@@ -31,7 +31,7 @@ public class Calendar {
 
 
         CalendarView frame = new CalendarView();
-        NumberAdditionUI frame2 = new NumberAdditionUI();
+        AddEventView frame2 = new AddEventView();
         CalenderController controller = new CalenderController(frame,frame2);
         System.out.print("Hello \n");
         System.out.print("Hello \n");

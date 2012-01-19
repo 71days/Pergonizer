@@ -16,15 +16,16 @@ import my.numberaddition.*;
 public class CalenderController implements  ActionListener{
     // CalendarModel model;
     CalendarView tableView;
-    NumberAdditionUI addEventView;
+    AddEventView addEventView;
     java.util.List EventList = new ArrayList();
     
-    public CalenderController(/*CalendarModel model ,*/ CalendarView tableView, NumberAdditionUI addEventView) {
+    public CalenderController(/*CalendarModel model ,*/ CalendarView tableView, AddEventView addEventView) {
         //this.model = ;
         this.tableView = tableView;
         this.addEventView = addEventView;
         
         tableView.addButtenActionListeners(this);
+        addEventView.AddButton.addActionListener(this);
     }
     
     public void actionPerformed(ActionEvent ae)
@@ -34,6 +35,20 @@ public class CalenderController implements  ActionListener{
         
         System.out.println(action_com);
         if (action_com.equals("addEvent"))
+        {
+         
+            CalendarEvent calEv = new CalendarEvent();
+            calEv = tableView.getCalendarEvent();
+            dStopHour   = calEv.getStopHour();
+            dStopMinute = calEv.getStopMinute(); 
+            dStartHour = calEv.getStartHour();
+            dStartMinute = calEv.getStartMinute();
+                    
+            addEventView.setStartTime(dStopHour, dStartMinute);
+            addEventView.setStopTime(dStartHour, dStopMinute);
+            addEventView.setVisible(true);
+        }
+        if (action_com.equals("Add"))
         {
             //tableView.combineActionPerformed(ae);
             CalendarEvent calEv = new CalendarEvent();
@@ -51,34 +66,20 @@ public class CalenderController implements  ActionListener{
             EventList.add(calEv);
             Collections.sort(EventList);
             
-//        CalendarEvent            calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(3);
-//        calEv.setStartTime(1, 0);
-//        calEv.setStopTime(6, 11);
-//        calEv.setName("XXX");
-//        tableView.EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(4);
-//        calEv.setStartTime(3, 41);
-//        calEv.setStopTime(4, 20);
-//        calEv.setName("YYY");
-//        tableView.EventList.add(calEv);
         
         
             tableView.resetTable();
             tableView.repaint();
             tableView.splitCellsIntoHours(EventList);
+            addEventView.setVisible(false);
             
             //tableView.setCalendarEvent(calEv);
         }
-        else if (action_com.equals("deleteEvent"))
+        if (action_com.equals("deleteEvent"))
         {
             
         }
-        else if (action_com.equals("cancelAddEvent"))
+        if (action_com.equals("cancelAddEvent"))
         {
         }
     }
