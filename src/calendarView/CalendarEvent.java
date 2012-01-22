@@ -16,7 +16,16 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
     Calendar calStop;
     String name;
     String description;
-    
+    boolean validity;
+
+    public boolean getValidity() {
+        return validity;
+    }
+
+    public void setValidity(boolean validity) {
+        this.validity = validity;
+    }
+
     /**
      * 
      * @return
@@ -41,23 +50,20 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
         this.name = name;
     }
 
-
     public CalendarEvent() {
         calStart = Calendar.getInstance();
         calStop = Calendar.getInstance();
 
     }
- 
 
-    public void setStartCalendar(Calendar x)
-    {
+    public void setStartCalendar(Calendar x) {
         calStart = (Calendar) x.clone();
     }
-    
-    public void setStopCalendar(Calendar x)
-    {
+
+    public void setStopCalendar(Calendar x) {
         calStop = (Calendar) x.clone();
     }
+
     public void setStartTime(int hour, int minute) {
         calStart.set(Calendar.HOUR_OF_DAY, hour);
         calStart.set(Calendar.MINUTE, minute);
@@ -77,46 +83,52 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
         calStop.set(Calendar.MONTH, month);
         calStop.set(Calendar.DATE, day);
     }
-    
-    public void setDayOfWeek(int day)
-    {
+
+    public void setDayOfWeek(int day) {
         calStart.set(Calendar.DAY_OF_WEEK, day);
         calStop.set(Calendar.DAY_OF_WEEK, day);
     }
+
     public int getDay() {
-        return calStart.get(Calendar.DATE);      
-    }
-    public int getDayOfWeek() {
-        return calStart.get(Calendar.DAY_OF_WEEK);      
-    }
-    public int getMonth() {
-        return calStart.get(Calendar.MONTH);      
-    }
-    public int getYear() {
-        return calStart.get(Calendar.YEAR);    
-    }
-    public int getStartHour() {
-        return calStart.get(Calendar.HOUR_OF_DAY);    
-    }
-    public int getStartMinute() {
-        return calStart.get(Calendar.MINUTE);    
-    }
-    public int getStopHour() {
-        return calStop.get(Calendar.HOUR_OF_DAY);    
-    }
-    public int getStopMinute() {
-        return calStop.get(Calendar.MINUTE);    
-    }
-    
-    Calendar getCalStart()
-    {
-        return calStart;
-    }
-    @Override
-     public int compareTo(CalendarEvent x) {
-        return calStart.compareTo(x.getCalStart());
+        return calStart.get(Calendar.DATE);
     }
 
+    public int getDayOfWeek() {
+        return calStart.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public int getMonth() {
+        return calStart.get(Calendar.MONTH);
+    }
+
+    public int getYear() {
+        return calStart.get(Calendar.YEAR);
+    }
+
+    public int getStartHour() {
+        return calStart.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getStartMinute() {
+        return calStart.get(Calendar.MINUTE);
+    }
+
+    public int getStopHour() {
+        return calStop.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getStopMinute() {
+        return calStop.get(Calendar.MINUTE);
+    }
+
+    Calendar getCalStart() {
+        return calStart;
+    }
+
+    @Override
+    public int compareTo(CalendarEvent x) {
+        return calStart.compareTo(x.getCalStart());
+    }
 //    @Override
 //    public int compareTo(Object o) {
 //        throw new UnsupportedOperationException("Not supported yet.");

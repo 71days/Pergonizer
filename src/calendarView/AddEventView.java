@@ -10,6 +10,7 @@
  */
 package calendarView;
 
+import java.util.regex.*;
 
 /**
  *
@@ -110,6 +111,7 @@ public class AddEventView extends javax.swing.JFrame {
                                 .addGap(79, 79, 79)))
                         .addGap(91, 91, 91))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -134,8 +136,9 @@ public class AddEventView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddButton)
                             .addComponent(jButton2)))
@@ -159,7 +162,6 @@ private void jTextFieldStopTimeActionPerformed(java.awt.event.ActionEvent evt) {
 private void jTextFieldStartTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldStartTimeActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_jTextFieldStartTimeActionPerformed
-    
     /**
      * @param args the command line arguments
      */
@@ -208,12 +210,90 @@ private void jTextFieldStartTimeActionPerformed(java.awt.event.ActionEvent evt) 
     private java.awt.Label label4;
     private java.awt.TextField textFieldEvName;
     // End of variables declaration//GEN-END:variables
+    private CalendarEvent event;
 
     void setStartTime(int hour, int minute) {
-        jTextFieldStartTime.setText(""+hour+":"+minute);
+        String s = String.format("%02d:%02d", hour, minute);
+        jTextFieldStartTime.setText(s);
     }
 
     void setStopTime(int hour, int minute) {
-        jTextFieldStopTime.setText(""+hour+":"+minute);
+        String s = String.format("%02d:%02d", hour, minute);
+        jTextFieldStopTime.setText(s);
+    }
+
+    CalendarEvent getCalendarEvent(/*CalendarEvent calEv*/) {
+        int minute;
+        int hour;
+
+
+        event.setValidity(false);
+
+        Pattern p = Pattern.compile("\\d+"); /*find numbers into a string */
+
+        /* Read start and stop hour */
+        /* Data is expected to be received in the format hour:minute*/
+        Matcher m = p.matcher(jTextFieldStartTime.getText());
+        if (!m.find()) {
+            return event; /* we didn't find an int so we leave */
+        }
+        hour = Integer.parseInt(m.group());
+
+        if (!(hour >= 0 && hour < 23)) /*sanitize data */ {
+            return event;
+        }
+
+        if (!m.find()) {
+            return event;
+        }
+        minute = Integer.parseInt(m.group());
+
+        if (!(minute >= 0 && minute < 60)) /*sanitize data */ {
+            return event;
+        }
+
+
+        event.setStartTime(hour, minute);
+
+
+        m = p.matcher(jTextFieldStopTime.getText());
+        if (!m.find()) {
+            return event; /* we didn't find an int so we leave */
+        }
+        hour = Integer.parseInt(m.group());
+
+        if (!(hour >= 0 && hour < 23)) /*sanitize data */ {
+            return event;
+        }
+
+        if (!m.find()) {
+            return event;
+        }
+        minute = Integer.parseInt(m.group());
+
+        if (!(minute >= 0 && minute < 60)) /*sanitize data */ {
+            return event;
+        }
+
+        event.setStopTime(hour, minute);
+
+        event.setName(textFieldEvName.getText());
+        event.setDescription(jTextAreaDescription.getText());
+        event.setValidity(true);
+
+        return event;
+    }
+
+    void setCalendarEvent(CalendarEvent calEv) {
+        int dStartHour, dStartMinute, dStopHour, dStopMinute;
+        event = calEv;
+
+        dStopHour = calEv.getStopHour();
+        dStopMinute = calEv.getStopMinute();
+        dStartHour = calEv.getStartHour();
+        dStartMinute = calEv.getStartMinute();
+
+        setStartTime(dStopHour, dStartMinute);
+        setStopTime(dStartHour, dStopMinute);
     }
 }

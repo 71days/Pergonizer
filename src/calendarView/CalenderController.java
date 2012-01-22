@@ -13,75 +13,69 @@ import my.numberaddition.*;
  *
  * @author FRC2010-Winner2
  */
-public class CalenderController implements  ActionListener{
+public class CalenderController implements ActionListener {
     // CalendarModel model;
+
     CalendarView tableView;
     AddEventView addEventView;
-    java.util.List EventList = new ArrayList();
-    
-    public CalenderController(/*CalendarModel model ,*/ CalendarView tableView, AddEventView addEventView) {
+    CalendarModel calendarModel;
+
+    public CalenderController(CalendarModel calendarModel, CalendarView tableView, AddEventView addEventView) {
         //this.model = ;
         this.tableView = tableView;
         this.addEventView = addEventView;
-        
+        this.calendarModel = calendarModel;
+
         tableView.addButtenActionListeners(this);
         addEventView.AddButton.addActionListener(this);
     }
-    
-    public void actionPerformed(ActionEvent ae)
-    {
+
+    public void actionPerformed(ActionEvent ae) {
         String action_com = ae.getActionCommand();
         int dStartHour, dStartMinute, dStopHour, dStopMinute;
-        
+
         System.out.println(action_com);
-        if (action_com.equals("addEvent"))
-        {
-         
+        if (action_com.equals("addEvent")) {
+
             CalendarEvent calEv = new CalendarEvent();
             calEv = tableView.getCalendarEvent();
-            dStopHour   = calEv.getStopHour();
-            dStopMinute = calEv.getStopMinute(); 
-            dStartHour = calEv.getStartHour();
-            dStartMinute = calEv.getStartMinute();
-                    
-            addEventView.setStartTime(dStopHour, dStartMinute);
-            addEventView.setStopTime(dStartHour, dStopMinute);
-            addEventView.setVisible(true);
+
+            if (calendarModel.checkEvent(calEv)) {
+                addEventView.setCalendarEvent(calEv);
+                addEventView.setVisible(true);
+            }
+
         }
-        if (action_com.equals("Add"))
-        {
-            //tableView.combineActionPerformed(ae);
+        if (action_com.equals("Add")) {
             CalendarEvent calEv = new CalendarEvent();
-            calEv = tableView.getCalendarEvent();
-            dStopHour   = calEv.getStopHour();
-            dStopMinute = calEv.getStopMinute(); 
-            dStartHour = calEv.getStartHour();
-            dStartMinute = calEv.getStartMinute();
-            dStopHour = dStopHour + 1;
-            calEv.setStartTime(dStartHour, dStartMinute);
-            calEv.setStopTime(dStopHour, dStopMinute );
-                     
-            
-            
-            EventList.add(calEv);
-            Collections.sort(EventList);
-            
-        
-        
-            tableView.resetTable();
-            tableView.repaint();
-            tableView.splitCellsIntoHours(EventList);
+
+            calEv = addEventView.getCalendarEvent();
+
+            if (calEv.getValidity()) //data is ok from the perspective of the view
+            {
+                /* we try to add the event 
+                 * if data is ok from the perspective of the model, the function will return true
+                 * and the event will be added
+                 */
+                if (calendarModel.addEvent(calEv)) {
+                    tableView.resetTable();
+                    tableView.repaint();
+                    tableView.splitCellsIntoHours(calendarModel.getEventList());
+                }
+            }
+
+
+
+
+
+
             addEventView.setVisible(false);
-            
-            //tableView.setCalendarEvent(calEv);
+
+
         }
-        if (action_com.equals("deleteEvent"))
-        {
-            
+        if (action_com.equals("deleteEvent")) {
         }
-        if (action_com.equals("cancelAddEvent"))
-        {
+        if (action_com.equals("cancelAddEvent")) {
         }
     }
-
 }

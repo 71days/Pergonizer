@@ -4,9 +4,6 @@
  */
 package calendarView;
 
-
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -27,19 +24,19 @@ public class Calendar {
      * 
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
 
+        CalendarModel model = new CalendarModel();
         CalendarView frame = new CalendarView();
         AddEventView frame2 = new AddEventView();
-        CalenderController controller = new CalenderController(frame,frame2);
-        System.out.print("Hello \n");
-        System.out.print("Hello \n");
-        
+        CalenderController controller = new CalenderController(model, frame, frame2);
+
         frame.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
-        });    }
+        });
+    }
 }

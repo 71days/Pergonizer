@@ -8,7 +8,6 @@ package calendarView;
 /*
  * (swing1.1beta3) jfc#96
  */
-
 import java.util.*;
 import java.util.Calendar;
 import java.awt.*;
@@ -34,80 +33,12 @@ public class CalendarView extends JFrame {
 
     CalendarView() {
         super("Main View");
-        //CalendarEvent calEv;
 
-        /****************************************/
-        // Manually added events for debugging  //
-        /***************************************/
-//        calEv = new CalendarEvent(); 
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(2, 0);
-//        calEv.setStopTime(2, 30);
-//        calEv.setName("Event1");
-//        EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(2, 50);
-//        calEv.setStopTime(3, 20);
-//        calEv.setName("Event2");
-//        EventList.add(calEv);
-//
-//        calEv = new CalendarEvent(); 
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(3, 40);
-//        calEv.setStopTime(5, 30);
-//        calEv.setName("Event3");
-//        EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(5, 30);
-//        calEv.setStopTime(6, 10);
-//        calEv.setName("Event4");
-//        EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent(); 
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(6, 50);
-//        calEv.setStopTime(8, 39);
-//        calEv.setName("Event5");
-//        EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(1);
-//        calEv.setStartTime(9, 0);
-//        calEv.setStopTime(9, 49);
-//        calEv.setName("Event6");
-//        EventList.add(calEv);
-        /*****************************/
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(3);
-//        calEv.setStartTime(1, 0);
-//        calEv.setStopTime(3, 11);
-//        calEv.setName("Event1");
-//        EventList.add(calEv);
-//        
-//        calEv = new CalendarEvent();
-//        calEv.setDate(2,1,2012);
-//        calEv.setDayOfWeek(4);
-//        calEv.setStartTime(3, 41);
-//        calEv.setStopTime(4, 20);
-//        calEv.setName("Event2");
-//        EventList.add(calEv);       
-        
-        System.out.print("1 \n");
+
         AttributiveCellTableModel ml = new AttributiveCellTableModel(24 * numOfRowsPerHour, 8);
 
 
-        cellAtt =  ml.getCellAttribute();
+        cellAtt = ml.getCellAttribute();
         table = new MultiSpanCellTable(ml);
         table.setRowHeight(5);
         JScrollPane scroll = new JScrollPane(table);
@@ -128,17 +59,7 @@ public class CalendarView extends JFrame {
         getContentPane().add(box);
         setSize(800, 400);
         setVisible(true);
-        
 
-
-//        splitCells(1, 1, 0, 5); // startRow - 1 ? 
-//        table.repaint(); //debug
-//
-//        splitCells(2, 2, 0, 7); // startRow - 1 ? 
-//        table.repaint(); //debug
-//
-//        splitCells(3, 3, 0, 8); // startRow - 1 ? 
-//        table.repaint(); //debug
         java.util.List EventList = new ArrayList();
         splitCellsIntoHours(EventList);
     }
@@ -147,17 +68,6 @@ public class CalendarView extends JFrame {
         b_one.addActionListener(al);
         b_split.addActionListener(al);
     }
-    /*    public void actionPerformed(ActionEvent e) {
-    System.out.println("Iepure");
-    if (e.getSource() == b_one) {
-    combineActionPerformed(e); 
-    }
-    else if (e.getSource() == b_split) {
-    splitActionPerformed(e);
-    }
-    
-    }
-     */
 
     public CalendarEvent getCalendarEvent() {
         int startHour, startMinute, stopHour, stopMinute;
@@ -165,13 +75,12 @@ public class CalendarView extends JFrame {
         int[] columns = table.getSelectedColumns();
         int[] rows = table.getSelectedRows();
 
-        if (columns.length == 0)
-        {
+        if (columns.length == 0) {
             columns = new int[1];
-            rows    = new int[1];
-            
-            rows[0]     = 0;
-            columns[0]  = 0;
+            rows = new int[1];
+
+            rows[0] = 0;
+            columns[0] = 0;
         }
         calEv.setStartCalendar(cal);
         calEv.setStopCalendar(cal);
@@ -181,9 +90,9 @@ public class CalendarView extends JFrame {
 
         stopHour = startHour;
         stopMinute = startMinute;
-        
+
         stopMinute += 30;
-        stopHour   += stopMinute / 60;
+        stopHour += stopMinute / 60;
         stopMinute %= 60;
         //calEv.IncDate(columns[0]);
         calEv.setStartTime(startHour, startMinute);
@@ -202,7 +111,7 @@ public class CalendarView extends JFrame {
         Scanner in = new Scanner(System.in);
         //name = in.nextLine();
         //System.out.println(name);
-        ((CellSpan)cellAtt).combine(rows, columns);
+        ((CellSpan) cellAtt).combine(rows, columns);
         table.clearSelection();
         table.revalidate();
         table.repaint();
@@ -211,7 +120,7 @@ public class CalendarView extends JFrame {
     public void splitActionPerformed(ActionEvent e) {
         int column = table.getSelectedColumn();
         int row = table.getSelectedRow();
-        ((CellSpan)cellAtt).split(row, column);
+        ((CellSpan) cellAtt).split(row, column);
         table.clearSelection();
         table.revalidate();
         table.repaint();
@@ -232,26 +141,26 @@ public class CalendarView extends JFrame {
         row = 0;
         // events should be sorted by date
         for (int i = 0; i < numOfEvents; i++) {
-            cal = (CalendarEvent)calList.get((i));
+            cal = (CalendarEvent) calList.get((i));
             eventDay = cal.getDayOfWeek();
-            System.out.println(""+cal.getStartHour()+":"+cal.getStartMinute());
-            System.out.println(""+cal.getStopHour()+":"+cal.getStopMinute());
-            
+            System.out.println("" + cal.getStartHour() + ":" + cal.getStartMinute());
+            System.out.println("" + cal.getStopHour() + ":" + cal.getStopMinute());
+
             startRow = transformToRowNumber(cal.getStartHour(), cal.getStartMinute(), "start");
             endRow = transformToRowNumber(cal.getStopHour(), cal.getStopMinute(), "stop");
             //endRow = endRow - 1;
             splitCells(day, eventDay, row, startRow); // startRow - 1 ? 
             table.repaint(); //debug
             //to do merge event
-            
+
             table.setValueAt(cal.getName(), startRow, eventDay);
             rows = new int[endRow - startRow + 1];
             columns[0] = eventDay;
             rows[0] = startRow;
-            ((ColoredCell)cellAtt).setBackground(Color.BLACK, 0, 0);
-            ((ColoredCell)cellAtt).setForeground(Color.yellow, 0, 0);
+            ((ColoredCell) cellAtt).setBackground(Color.BLACK, 0, 0);
+            ((ColoredCell) cellAtt).setForeground(Color.yellow, 0, 0);
             table.repaint(); //debug
-            ((CellSpan)cellAtt).combine(rows, columns);
+            ((CellSpan) cellAtt).combine(rows, columns);
             //splitCells(eventDay, eventDay, startRow, endRow+1);
             day = eventDay;
             row = Math.min(endRow + 1, 24 * numOfRowsPerHour - 1);
@@ -263,19 +172,16 @@ public class CalendarView extends JFrame {
 
     int transformToRowNumber(int hours, int minutes, String typeOfRow) {
         float result;
-        result = hours * numOfRowsPerHour + (float)minutes * numOfRowsPerHour / 60; //60 minutes per hour
-        result = (float)Math.ceil(result);
-        
-        if (typeOfRow.equals("start"))
-        {
-            return (int)result;
+        result = hours * numOfRowsPerHour + (float) minutes * numOfRowsPerHour / 60; //60 minutes per hour
+        result = (float) Math.ceil(result);
+
+        if (typeOfRow.equals("start")) {
+            return (int) result;
+        } else if (typeOfRow.equals("stop")) {
+            return (int) result - 1;
         }
-        else if (typeOfRow.equals("stop"))
-        {
-            return (int)result - 1;
-        }
-        
-        assert(false);
+
+        assert (false);
         return 0;
     }
 
@@ -307,8 +213,7 @@ public class CalendarView extends JFrame {
         int iter;
         int aux;
 
-        if (startRow == stopRow)
-        {
+        if (startRow == stopRow) {
             return;
         }
         middleRows = new int[numOfRowsPerHour];
@@ -324,29 +229,29 @@ public class CalendarView extends JFrame {
 
         firstRows = new int[aux];
         firstRows[0] = startRow;
-        ((CellSpan)cellAtt).combine(firstRows, columns);
+        ((CellSpan) cellAtt).combine(firstRows, columns);
         table.repaint();//debug
         //merge full hours
         while (iter + numOfRowsPerHour < stopRow) {
             middleRows[0] = iter;
-            ((CellSpan)cellAtt).combine(middleRows, columns);
+            ((CellSpan) cellAtt).combine(middleRows, columns);
             iter += numOfRowsPerHour;
         }
         //merge fractional at the end
         if (iter < stopRow) {
             lastRows = new int[stopRow - iter];
             lastRows[0] = iter;
-            ((CellSpan)cellAtt).combine(lastRows, columns);
+            ((CellSpan) cellAtt).combine(lastRows, columns);
             table.repaint();//debug
         }
     }
-    void resetTable()
-    {
-        for (int i = 0; i < 7; i++)
-            for (int j = 0; j < 24*numOfRowsPerHour; j++)
-            {
-                ((CellSpan)cellAtt).split(j, i);
+
+    void resetTable() {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 24 * numOfRowsPerHour; j++) {
+                ((CellSpan) cellAtt).split(j, i);
                 table.setValueAt("", j, i);
             }
+        }
     }
 }
