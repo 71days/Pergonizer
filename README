@@ -1,8 +1,11 @@
 ChangeLog:
 
-22-01-2012: Made adding events functional
-			Created basic functionality for CalendarModel
+22-01-2012:
+	Adding events is now functional
+	Created basic functionality for CalendarModel
 			
-19-01-2012: Created AddEventView - which will gather the information needed for the creation of an event
+19-01-2012: 
+	Created AddEventView - which will gather the information needed for the creation of an event
 
-18-01-2012: Fixed Cell Spliting into custom time intervals
+18-01-2012: 
+	Fixed Cell Spliting into custom time intervals
