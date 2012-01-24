@@ -14,24 +14,64 @@ import java.lang.String;
 
 /**
  *
- * @author FRC2010-Winner2
+ * @author Bogdan Sandoi
  */
 public class CalendarModel {
+
     java.util.List EventList = new ArrayList();
-    
+
     boolean checkEvent(CalendarEvent calEv) {
-        /* to be implemented */
+        CalendarEvent cal;
+        Iterator<CalendarEvent> iterator = EventList.iterator();
+        while (iterator.hasNext()) {
+            cal = iterator.next();
+            /* check to see if the events dont overlap*/
+            if (!cal.disjointTo(calEv)) {
+                return false;
+            }
+        }
         return true;
     }
 
     boolean addEvent(CalendarEvent calEv) {
-                    EventList.add(calEv);
-                    Collections.sort(EventList);
-                    return true;
+
+        if (checkEvent(calEv)) {
+            EventList.add(calEv);
+            Collections.sort(EventList);
+            return true;
+        }
+        return false;
     }
 
     List getEventList() {
         return EventList;
     }
-    
+
+    /**
+     * This function tries to delete an event if it exists
+     * @param calendarEvent - if the start time of this event is similar by a 
+     * precision margin "precisionMs", with an existing event, the existing event will be deleted
+     * @param precisionMs  - precision margin
+     * @return true if an event was deleted, false otherwise
+     */
+    boolean deleteEvent(CalendarEvent calendarEvent, long precisionMs) {
+        long evTime;
+        long time = calendarEvent.calStart.getTimeInMillis();
+        CalendarEvent cal;
+        Iterator<CalendarEvent> iterator = EventList.iterator();
+        while (iterator.hasNext()) {
+            cal = iterator.next();
+            evTime = cal.calStart.getTimeInMillis();
+            
+            /* the start time of the current event is similiar to our searched event
+             we delete the event*/
+            if ((time <= evTime) && (evTime < time + precisionMs))
+            {
+                /* we have found the event we want to delete */   
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
+    }
 }
