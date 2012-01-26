@@ -97,7 +97,19 @@ public class CalenderController implements ActionListener {
 
             }
         }
-        if (action_com.equals("cancelAddEvent")) {
+        if (action_com.equals("nextWeek")) {
+            tableView.goToNextWeek();
+            tableView.resetTable();
+            tableView.repaint();
+            tableView.splitCellsIntoHours(calendarModel.getEventList());
+
+        }
+        if (action_com.equals("previousWeek")) {
+            tableView.goToPrevWeek();
+            tableView.resetTable();
+            tableView.repaint();
+            tableView.splitCellsIntoHours(calendarModel.getEventList());
+
         }
     }
 }

@@ -239,4 +239,13 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
 //    public int compareTo(Object o) {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
+
+    boolean hasSameWeek(Calendar cal) {
+        if ((calStart.get(Calendar.WEEK_OF_YEAR) == cal.get(Calendar.WEEK_OF_YEAR)) &&
+                (calStart.get(Calendar.YEAR) == cal.get(Calendar.YEAR)))
+                {
+                    return true;
+                }
+       return false;
+    }
 }

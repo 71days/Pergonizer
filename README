@@ -1,9 +1,12 @@
 ChangeLog:
 
+26-01-2012:
+	Added changing of displayed week functionality
 
 24-01-2012:
 	Added events overlap preventions
 	Deleting events is now functional
+
 22-01-2012:
 	Adding events is now functional
 	Created basic functionality for CalendarModel
