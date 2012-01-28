@@ -36,6 +36,7 @@ public class CalendarModel {
     boolean addEvent(CalendarEvent calEv) {
 
         if (checkEvent(calEv)) {
+            calEv.setValidity(true);
             EventList.add(calEv);
             Collections.sort(EventList);
             return true;
@@ -73,5 +74,26 @@ public class CalendarModel {
             }
         }
         return false;
+    }
+    
+    CalendarEvent getEvent(CalendarEvent calendarEvent, long precisionMs) {
+        long evTime;
+        long time = calendarEvent.calStart.getTimeInMillis();
+        CalendarEvent cal;
+        Iterator<CalendarEvent> iterator = EventList.iterator();
+        while (iterator.hasNext()) {
+            cal = iterator.next();
+            evTime = cal.calStart.getTimeInMillis();
+            
+            /* the start time of the current event is similiar to our searched event
+             we delete the event*/
+            if ((time <= evTime) && (evTime < time + precisionMs))
+            {
+                /* we have found the event we want to delete */   
+                return cal;
+            }
+        }
+        calendarEvent.setValidity(false);
+        return calendarEvent;
     }
 }

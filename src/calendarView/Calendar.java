@@ -30,7 +30,9 @@ public class Calendar {
         CalendarModel model = new CalendarModel();
         CalendarView frame = new CalendarView();
         AddEventView frame2 = new AddEventView();
-        CalenderController controller = new CalenderController(model, frame, frame2);
+        EventDescriptionView    eventDescriptionView = new EventDescriptionView();
+        
+        CalenderController controller = new CalenderController(model, frame, frame2, eventDescriptionView);
 
         frame.addWindowListener(new WindowAdapter() {
 

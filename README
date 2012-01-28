@@ -1,5 +1,9 @@
 ChangeLog:
 
+27-01-2012:
+	Added detalied event view on double click.
+	Fixed two bugs: one in the event addition mechanism and one in the table display
+
 26-01-2012:
 	Added changing of displayed week functionality
 

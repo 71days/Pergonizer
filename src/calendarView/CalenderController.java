@@ -6,6 +6,8 @@ package calendarView;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import my.numberaddition.*;
 
@@ -13,12 +15,13 @@ import my.numberaddition.*;
  *
  * @author Bogdan Sandoi
  */
-public class CalenderController implements ActionListener {
+public class CalenderController implements MouseListener, ActionListener {
     // CalendarModel model;
 
     CalendarView tableView;
     AddEventView addEventView;
     CalendarModel calendarModel;
+    EventDescriptionView eventDescriptionView;
 
     /**
      * Calendar Controller constructor. Registers the model and the views
@@ -27,15 +30,20 @@ public class CalenderController implements ActionListener {
      * @param tableView
      * @param addEventView 
      */
-    public CalenderController(CalendarModel calendarModel, CalendarView tableView, AddEventView addEventView) {
+    public CalenderController(CalendarModel calendarModel, CalendarView tableView,
+            AddEventView addEventView, EventDescriptionView eventDescriptionView) {
         //this.model = ;
         this.tableView = tableView;
         this.addEventView = addEventView;
         this.calendarModel = calendarModel;
+        this.eventDescriptionView = eventDescriptionView;
 
         /* register as an action listener with the tableVeiw and addEventView */
-        tableView.addButtenActionListeners(this);
+        tableView.addButtonActionListeners(this);
+        tableView.addMouseActionListeners(this);
+        addEventView.addButtonActionListeners(this);
         addEventView.AddButton.addActionListener(this);
+        eventDescriptionView.addButtonActionListeners(this);
     }
 
     /**
@@ -51,15 +59,18 @@ public class CalenderController implements ActionListener {
         if (action_com.equals("addEvent")) {
 
             CalendarEvent calEv = new CalendarEvent();
-            calEv = tableView.getCalendarEvent();
 
-            if (calendarModel.checkEvent(calEv)) {
-                /*Pass the calenderEvent to the addEventView 
-                 * This view will gather the needed event data from the user 
-                 */
-                addEventView.setCalendarEvent(calEv);
-                addEventView.setVisible(true);
+            if (tableView.checkSelection()) { // see if the selection is valid
+                calEv = tableView.getCalendarEvent();
+                if (calendarModel.checkEvent(calEv)) { // check for conflicts
+                    /**Pass the calenderEvent to the addEventView 
+                     * This view will gather the needed event data from the user 
+                     */
+                    addEventView.setCalendarEvent(calEv);
+                    addEventView.setVisible(true);
+                }
             }
+            return;
 
         }
         /* Add button pushed in the AddEventView */
@@ -82,8 +93,14 @@ public class CalenderController implements ActionListener {
             }
 
             addEventView.setVisible(false); /* we don't need the addEventView at this point */
+            return;
 
-
+        }
+        
+        if (action_com.equals("addEventCancel"))
+        {
+            addEventView.setVisible(false);
+            return;
         }
         /* deleteEvent button pressed in the Calendar View */
         if (action_com.equals("deleteEvent")) {
@@ -96,12 +113,14 @@ public class CalenderController implements ActionListener {
                 tableView.splitCellsIntoHours(calendarModel.getEventList());
 
             }
+            return;
         }
         if (action_com.equals("nextWeek")) {
             tableView.goToNextWeek();
             tableView.resetTable();
             tableView.repaint();
             tableView.splitCellsIntoHours(calendarModel.getEventList());
+            return;
 
         }
         if (action_com.equals("previousWeek")) {
@@ -109,7 +128,45 @@ public class CalenderController implements ActionListener {
             tableView.resetTable();
             tableView.repaint();
             tableView.splitCellsIntoHours(calendarModel.getEventList());
+            return;
 
         }
+
+        if (action_com.equals("evDescriptorOK")) {
+            eventDescriptionView.setVisible(false);
+            return;
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        CalendarEvent ev;
+        if (e.getClickCount() == 2) {
+            ev = calendarModel.getEvent(tableView.getCalendarEvent(), tableView.getPrecisionMs());
+            if (ev.getValidity()) {
+                eventDescriptionView.setEventDetails(ev);
+                eventDescriptionView.setVisible(true);
+                System.out.println("Description");
+            }
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

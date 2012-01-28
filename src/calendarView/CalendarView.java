@@ -37,14 +37,24 @@ public class CalendarView extends JFrame {
         super("Main View");
 
         AttributiveCellTableModel ml = new AttributiveCellTableModel(24 * numOfRowsPerHour, 8);
-
-
         cellAtt = ml.getCellAttribute();
         table = new MultiSpanCellTable(ml);
         table.setRowHeight(5);
         JScrollPane scroll = new JScrollPane(table);
 
+        table.getColumnModel().getColumn(0).setHeaderValue("Hour");
+        
+        table.getColumnModel().getColumn(1).setHeaderValue("Monday\njahaha");
+        table.getColumnModel().getColumn(2).setHeaderValue("Tuesday");
+        table.getColumnModel().getColumn(3).setHeaderValue("Wednesday");
+        table.getColumnModel().getColumn(4).setHeaderValue("Thursday");
+        table.getColumnModel().getColumn(5).setHeaderValue("Friday");
+        table.getColumnModel().getColumn(6).setHeaderValue("Saturday");
+        table.getColumnModel().getColumn(7).setHeaderValue("Sunday");
+ 
+        
         b_one = new JButton("addEvent");
+        
         b_split = new JButton("deleteEvent");
         b_nextWeek = new JButton("nextWeek");
         b_prevWeek = new JButton("previousWeek");
@@ -57,7 +67,7 @@ public class CalendarView extends JFrame {
         p_buttons1.add(b_prevWeek);
 
 
-
+        
         Box box = new Box(BoxLayout.Y_AXIS);
         box.add(scroll);
         box.add(p_buttons1);
@@ -74,14 +84,32 @@ public class CalendarView extends JFrame {
      * Function which is called to register an external action listener
      * @param al
      */
-    public void addButtenActionListeners(ActionListener al) {
+    public void addButtonActionListeners(ActionListener al) {
         b_one.addActionListener(al);
         b_split.addActionListener(al);
         b_nextWeek.addActionListener(al);
         b_prevWeek.addActionListener(al);
-
+    }
+    public void addMouseActionListeners(MouseListener ml)
+    {
+        table.addMouseListener(ml);
     }
 
+    public boolean checkSelection()
+    {
+        int[] columns = table.getSelectedColumns();
+        int[] rows = table.getSelectedRows();        
+       /* the user hasn't selected anything */
+        if (columns.length == 0) {
+            return false;
+        }        
+        if (columns[0] == 0) /* header row is selected */
+        {
+            return false;
+        }
+        
+        return true; // valid selection was made
+    }
     /**
      * Transform the user cell selection into a CalendarEvent
      * @return
@@ -200,7 +228,7 @@ public class CalendarView extends JFrame {
             }
         }
         /* Merge the remaining cells*/
-        splitCells(day, 6, row, 24 * numOfRowsPerHour - 1);
+        splitCells(day, 7, row, 24 * numOfRowsPerHour );
         table.repaint();//debug
     }
 
@@ -242,7 +270,7 @@ public class CalendarView extends JFrame {
 
 
         if (startDay != stopDay) {
-            splitDay(startDay, startRow, 24 * numOfRowsPerHour - 1);
+            splitDay(startDay, startRow, 24 * numOfRowsPerHour );
             table.repaint();//debug
             splitDay(stopDay, 0, endRow);
             table.repaint();//debug
@@ -251,7 +279,7 @@ public class CalendarView extends JFrame {
             table.repaint();//debug
         }
         for (int i = startDay + 1; i < stopDay; i++) {
-            splitDay(i, 0, 24 * numOfRowsPerHour - 1);
+            splitDay(i, 0, 24 * numOfRowsPerHour );
             table.repaint();//debug
         }
 
@@ -302,14 +330,20 @@ public class CalendarView extends JFrame {
         }
     }
 
+
     /**
      * Reset the table cells
      */
     void resetTable() {
-        for (int i = 0; i < 7; i++) {
+        
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 24 * numOfRowsPerHour; j++) {
                 ((CellSpan) cellAtt).split(j, i);
                 table.setValueAt("", j, i);
+                if (i == 0 && (j % numOfRowsPerHour == 0) ) // we are at the row header
+                {
+                    table.setValueAt(String.format("%02d:00", j/numOfRowsPerHour),j,i);
+                }    
             }
         }
     }

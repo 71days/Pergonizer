@@ -10,6 +10,7 @@
  */
 package calendarView;
 
+import java.awt.event.ActionListener;
 import java.util.regex.*;
 
 /**
@@ -49,9 +50,11 @@ public class AddEventView extends javax.swing.JFrame {
         AddButton.setText("Add");
 
         jButton2.setText("Cancel");
+        jButton2.setActionCommand("addEventCancel");
 
         jTextAreaDescription.setColumns(20);
         jTextAreaDescription.setRows(5);
+        jTextAreaDescription.setText("Add description here");
         jScrollPane1.setViewportView(jTextAreaDescription);
 
         label1.setText("Description");
@@ -111,7 +114,6 @@ public class AddEventView extends javax.swing.JFrame {
                                 .addGap(79, 79, 79)))
                         .addGap(91, 91, 91))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -293,7 +295,12 @@ private void jTextFieldStartTimeActionPerformed(java.awt.event.ActionEvent evt) 
         dStartHour = calEv.getStartHour();
         dStartMinute = calEv.getStartMinute();
 
-        setStartTime(dStopHour, dStartMinute);
-        setStopTime(dStartHour, dStopMinute);
+        setStartTime(dStartHour, dStartMinute);
+        setStopTime(dStopHour, dStopMinute);
+    }
+
+    void addButtonActionListeners( ActionListener al) {
+        AddButton.addActionListener(al);
+        jButton2.addActionListener(al);
     }
 }
