@@ -22,6 +22,7 @@ public class CalenderController implements MouseListener, ActionListener {
     AddEventView addEventView;
     CalendarModel calendarModel;
     EventDescriptionView eventDescriptionView;
+    LogInView   loginView;
 
     /**
      * Calendar Controller constructor. Registers the model and the views
@@ -31,12 +32,13 @@ public class CalenderController implements MouseListener, ActionListener {
      * @param addEventView 
      */
     public CalenderController(CalendarModel calendarModel, CalendarView tableView,
-            AddEventView addEventView, EventDescriptionView eventDescriptionView) {
+            AddEventView addEventView, EventDescriptionView eventDescriptionView, LogInView   loginView) {
         //this.model = ;
         this.tableView = tableView;
         this.addEventView = addEventView;
         this.calendarModel = calendarModel;
         this.eventDescriptionView = eventDescriptionView;
+        this.loginView = loginView; 
 
         /* register as an action listener with the tableVeiw and addEventView */
         tableView.addButtonActionListeners(this);
@@ -44,6 +46,10 @@ public class CalenderController implements MouseListener, ActionListener {
         addEventView.addButtonActionListeners(this);
         addEventView.AddButton.addActionListener(this);
         eventDescriptionView.addButtonActionListeners(this);
+        loginView.addButtonActionListeners(this);
+        calendarModel.loadList(); /* load events */
+        loginView.setVisible(true);
+
     }
 
     /**
@@ -55,6 +61,16 @@ public class CalenderController implements MouseListener, ActionListener {
         int dStartHour, dStartMinute, dStopHour, dStopMinute;
 
         System.out.println(action_com);
+        
+        if (action_com.equals("Login"))
+        {
+            
+            calendarModel.setCurrentUser(loginView.getUsername());
+            tableView.resetTable();
+            tableView.splitCellsIntoHours(calendarModel.getEventList());
+            tableView.setVisible(true);
+            return;
+        }
         /* AddEvent button pressed in the CalendarView */
         if (action_com.equals("addEvent")) {
 
@@ -66,6 +82,7 @@ public class CalenderController implements MouseListener, ActionListener {
                     /**Pass the calenderEvent to the addEventView 
                      * This view will gather the needed event data from the user 
                      */
+                    addEventView.setUserList(calendarModel.getUserList());
                     addEventView.setCalendarEvent(calEv);
                     addEventView.setVisible(true);
                 }

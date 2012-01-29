@@ -74,10 +74,10 @@ public class CalendarView extends JFrame {
         box.add(p_buttons);
         getContentPane().add(box);
         setSize(800, 400);
-        setVisible(true);
+        //setVisible(true);
 
-        java.util.List EventList = new ArrayList();
-        splitCellsIntoHours(EventList); /* Send a dummy event list*/
+        //java.util.List EventList = new ArrayList();
+        //splitCellsIntoHours(EventList); /* Send a dummy event list*/
     }
 
     /**
@@ -145,6 +145,8 @@ public class CalendarView extends JFrame {
 
         calEv.setStartTime(startHour, startMinute);
         calEv.setStopTime(stopHour, stopMinute);
+        
+        //calEv.addParticipant("Vali");
         //rows.length
         return calEv;
     }
@@ -360,4 +362,6 @@ public class CalendarView extends JFrame {
     void goToPrevWeek() {
         cal.roll(Calendar.WEEK_OF_YEAR, false);
     }
+    
+    
 }

@@ -4,19 +4,24 @@
  */
 package calendarView;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
  * @author Bogdan Sandoi
  */
-public class CalendarEvent implements Comparable<CalendarEvent> {
+public class CalendarEvent implements Comparable<CalendarEvent>, Serializable {
 
     Calendar calStart;
     Calendar calStop;
     String name;
     String description;
     boolean validity;
+    List<String> persons = new ArrayList();
 
     /**
      * 
@@ -207,33 +212,35 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
     Calendar getCalStop() {
         return calStop;
     }
+
     @Override
     /*
      * This function is used by the java List type, to sort the list
      */
     public int compareTo(CalendarEvent x) {
         return calStart.compareTo(x.getCalStart());
-        
+
     }
-    
+
     /**
      * Function which checks if the calendar Events overlap or not
      * @param x
      * @return true if the events don't overlap(are disjoint), false otherwise
      */
-    public boolean disjointTo(CalendarEvent x)
-    {
+    public boolean disjointTo(CalendarEvent x) {
         int comp1, comp2;
-        
-        comp1 = calStart.compareTo(x.getCalStop()); 
-        comp2 = calStop.compareTo(x.getCalStart());
-        /* */
-        if ((comp1 >= 0) || ( comp2 <= 0))
-        {
-            return true;
+
+        if (x.hasPersons(this.persons)) { /* some persons share the same event */
+            comp1 = calStart.compareTo(x.getCalStop());
+            comp2 = calStop.compareTo(x.getCalStart());
+            /* */
+            if ((comp1 >= 0) || (comp2 <= 0)) { /* the two events don't overlap*/
+                return true;
+            }
+            return false;
         }
+        return true;
         
-        return false;
     }
 //    @Override
 //    public int compareTo(Object o) {
@@ -241,11 +248,53 @@ public class CalendarEvent implements Comparable<CalendarEvent> {
 //    }
 
     boolean hasSameWeek(Calendar cal) {
-        if ((calStart.get(Calendar.WEEK_OF_YEAR) == cal.get(Calendar.WEEK_OF_YEAR)) &&
-                (calStart.get(Calendar.YEAR) == cal.get(Calendar.YEAR)))
-                {
-                    return true;
-                }
-       return false;
+        if ((calStart.get(Calendar.WEEK_OF_YEAR) == cal.get(Calendar.WEEK_OF_YEAR))
+                && (calStart.get(Calendar.YEAR) == cal.get(Calendar.YEAR))) {
+            return true;
+        }
+        return false;
+    }
+
+    boolean hasPerson(String user) {
+        return persons.contains(user);
+    }
+
+    void removePerson(String user) {
+        String s;
+        Iterator<String> iterator = persons.iterator();
+
+        while (iterator.hasNext()) {
+            s = iterator.next();
+            if (s.equals(user)) {
+                iterator.remove();
+                return;
+            }
+        }
+    }
+
+    List<String> getParticipants()
+    {
+        return persons;
+    }
+    int getNumOfPersons() {
+        return persons.size();
+    }
+
+    /**
+     * 
+     * @param persons - list of persons
+     * @return true if at least one person appears in both lists
+     */
+    private boolean hasPersons(List<String> persons) {
+        for (int i = 0; i < persons.size(); i++) {
+            if (this.persons.contains(persons.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void addParticipant(String s) {
+        persons.add(s);
     }
 }
