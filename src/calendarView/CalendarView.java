@@ -44,7 +44,7 @@ public class CalendarView extends JFrame {
 
         table.getColumnModel().getColumn(0).setHeaderValue("Hour");
         
-        table.getColumnModel().getColumn(1).setHeaderValue("Monday\njahaha");
+        table.getColumnModel().getColumn(1).setHeaderValue("Monday");
         table.getColumnModel().getColumn(2).setHeaderValue("Tuesday");
         table.getColumnModel().getColumn(3).setHeaderValue("Wednesday");
         table.getColumnModel().getColumn(4).setHeaderValue("Thursday");

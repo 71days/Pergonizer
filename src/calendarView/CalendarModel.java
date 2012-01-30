@@ -25,6 +25,11 @@ public class CalendarModel {
 
     boolean checkEvent(CalendarEvent calEv) {
         CalendarEvent cal;
+
+        if (!calEv.hasPerson(currentUser)) {
+            calEv.addParticipant(currentUser);
+        }
+
         Iterator<CalendarEvent> iterator = EventList.iterator();
         while (iterator.hasNext()) {
             cal = iterator.next();
@@ -40,7 +45,9 @@ public class CalendarModel {
 
         if (checkEvent(calEv)) {
             calEv.setValidity(true);
-            calEv.persons.add(currentUser);
+            if (!calEv.hasPerson(currentUser)) {
+                calEv.addParticipant(currentUser);
+            }
             EventList.add(calEv);
             Collections.sort(EventList);
             saveList();

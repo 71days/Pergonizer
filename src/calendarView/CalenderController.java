@@ -44,7 +44,7 @@ public class CalenderController implements MouseListener, ActionListener {
         tableView.addButtonActionListeners(this);
         tableView.addMouseActionListeners(this);
         addEventView.addButtonActionListeners(this);
-        addEventView.AddButton.addActionListener(this);
+        //addEventView.AddButton.addActionListener(this);
         eventDescriptionView.addButtonActionListeners(this);
         loginView.addButtonActionListeners(this);
         calendarModel.loadList(); /* load events */
